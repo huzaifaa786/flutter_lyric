@@ -338,11 +338,10 @@ class LyricReaderState extends State<LyricsReader>
           if (widget.model.isNullOrEmpty) {
             return widget.emptyBuilder?.call() ?? Container();
           }
-          return Text('Lyrics: ');
-          // return CustomPaint(
-          //   painter: lyricPaint,
-          //   size: mSize,
-          // );
+          return CustomPaint(
+            painter: lyricPaint,
+            size: mSize,
+          );
         },
       ),
     );

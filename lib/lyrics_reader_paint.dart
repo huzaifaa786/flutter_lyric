@@ -1,8 +1,12 @@
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_lyric/lyric_helper.dart';
 import 'package:flutter_lyric/lyric_ui/lyric_ui.dart';
 import 'package:flutter_lyric/lyrics_log.dart';
 import 'package:flutter_lyric/lyrics_reader_model.dart';
+import 'package:http/http.dart' as http;
 
 ///draw lyric reader
 class LyricsReaderPaint extends ChangeNotifier implements CustomPainter {
@@ -234,11 +238,52 @@ class LyricsReaderPaint extends ChangeNotifier implements CustomPainter {
           Rect.fromLTWH(0, 0, mSize.width, mSize.height), layerPaint);
     }
     paint.paint(canvas, offset);
+    // Image painting
+
+    // Load image from URL
+    loadImageFromUrl('https://robohash.org/1234.png?set=set4').then((image) {
+      if (image != null) {
+        // Calculate image position and size
+        double imageSize = lineHeight;
+        double imageOffsetX = offset.dx - imageSize - 8; // Adjust as needed
+        double imageOffsetY = offsetY;
+        Rect imageRect =
+            Rect.fromLTWH(imageOffsetX, imageOffsetY, imageSize, imageSize);
+
+        // Draw image
+        canvas.drawImageRect(
+          image,
+          Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+          imageRect,
+          Paint(),
+        );
+      }
+    });
+
     if (isEnableLight) {
       drawHighlight(element!, canvas, paint, offset);
       canvas.restore();
     }
     return lineHeight;
+  }
+
+  Future<ui.Image?> loadImageFromUrl(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final Uint8List bytes = response.bodyBytes;
+        final Completer<ui.Image> completer = Completer();
+        ui.decodeImageFromList(bytes, (ui.Image image) {
+          completer.complete(image);
+        });
+        return completer.future;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error loading image: $e');
+      return null;
+    }
   }
 
   ///获取行绘制横向坐标
