@@ -286,10 +286,6 @@ class LyricReaderState extends State<LyricsReader>
   Widget build(BuildContext context) {
     return buildTouchReader(Stack(
       children: [
-        Text(
-          'Hello world',
-          style: TextStyle(color: Colors.white, fontSize: 24),
-        ),
         buildReaderWidget(),
         if (widget.selectLineBuilder != null &&
             isShowSelectLineWidget &&
@@ -342,10 +338,11 @@ class LyricReaderState extends State<LyricsReader>
           if (widget.model.isNullOrEmpty) {
             return widget.emptyBuilder?.call() ?? Container();
           }
-          return CustomPaint(
-            painter: lyricPaint,
-            size: mSize,
-          );
+          return Text('Lyrics: ');
+          // return CustomPaint(
+          //   painter: lyricPaint,
+          //   size: mSize,
+          // );
         },
       ),
     );
