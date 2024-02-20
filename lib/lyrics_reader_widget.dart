@@ -309,9 +309,9 @@ class LyricReaderState extends State<LyricsReader>
                 }
                 return widget.selectLineBuilder!.call(
                     lyricPaint.model?.lyrics[centerIndex].startTime ?? 0, () {
-                  setSelectLine(false);
-                  disposeFiling();
-                  disposeSelectLineDelay();
+                  // setSelectLine(false);
+                  // disposeFiling();
+                  // disposeSelectLineDelay();
                 });
               }),
         ),
