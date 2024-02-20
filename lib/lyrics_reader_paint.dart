@@ -240,7 +240,7 @@ class LyricsReaderPaint extends ChangeNotifier implements CustomPainter {
     paint.paint(canvas, offset);
     // Image painting
 
-    drawImage(canvas, lineHeight, offset, offsetY);
+    // drawImage(canvas, lineHeight, offset, offsetY);
 
     if (isEnableLight) {
       drawHighlight(element!, canvas, paint, offset);
