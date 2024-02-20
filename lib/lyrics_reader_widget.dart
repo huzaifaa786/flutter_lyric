@@ -27,6 +27,7 @@ class LyricsReader extends StatefulWidget {
   final bool? playing;
   final int position;
   final EdgeInsets? padding;
+  final Widget? speakerAvatar;
   final VoidCallback? onTap;
   final SelectLineBuilder? selectLineBuilder;
   final EmptyBuilder? emptyBuilder;
@@ -44,6 +45,7 @@ class LyricsReader extends StatefulWidget {
     this.onTap,
     this.playing,
     this.emptyBuilder,
+    this.speakerAvatar,
   }) : ui = lyricUi ?? UINetease();
 }
 
@@ -287,6 +289,7 @@ class LyricReaderState extends State<LyricsReader>
     return buildTouchReader(Stack(
       children: [
         buildReaderWidget(),
+        if (widget.speakerAvatar != null) buildImageWidget(),
         if (widget.selectLineBuilder != null &&
             isShowSelectLineWidget &&
             lyricPaint.centerY != 0)
@@ -309,10 +312,32 @@ class LyricReaderState extends State<LyricsReader>
                 }
                 return widget.selectLineBuilder!.call(
                     lyricPaint.model?.lyrics[centerIndex].startTime ?? 0, () {
-                  // setSelectLine(false);
-                  // disposeFiling();
-                  // disposeSelectLineDelay();
+                  setSelectLine(false);
+                  disposeFiling();
+                  disposeSelectLineDelay();
                 });
+              }),
+        ),
+      ),
+      top: (widget.padding?.top ?? 0),
+      left: 10,
+      right: 0,
+    );
+  }
+
+  Positioned buildImageWidget() {
+    return Positioned(
+      child: Container(
+        height: lyricPaint.centerY * 2,
+        child: Center(
+          child: StreamBuilder<int>(
+              stream: centerLyricIndexStream.stream,
+              builder: (context, snapshot) {
+                var centerIndex = snapshot.data ?? 0;
+                if (lyricPaint.model.isNullOrEmpty) {
+                  return Container();
+                }
+                return widget.speakerAvatar!;
               }),
         ),
       ),
@@ -341,7 +366,6 @@ class LyricReaderState extends State<LyricsReader>
           return Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-             
               CustomPaint(
                 painter: lyricPaint,
                 size: mSize,
