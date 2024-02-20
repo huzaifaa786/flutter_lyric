@@ -317,7 +317,7 @@ class LyricReaderState extends State<LyricsReader>
         ),
       ),
       top: (widget.padding?.top ?? 0),
-      left: 0,
+      left: 10,
       right: 0,
     );
   }
