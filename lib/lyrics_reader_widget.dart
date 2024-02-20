@@ -341,11 +341,7 @@ class LyricReaderState extends State<LyricsReader>
           return Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                height: 50,
-                width: 50,
-                child: Image.network('https://robohash.org/1234.png?set=set4'),
-              ),
+             
               CustomPaint(
                 painter: lyricPaint,
                 size: mSize,
